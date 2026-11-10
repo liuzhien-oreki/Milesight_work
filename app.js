@@ -120,5 +120,4 @@ function refineRoiStory(){
   items.forEach((item,i)=>{if(!story[i])return;let title=item.querySelector('b'),copy=item.querySelector('span');if(title)title.textContent=story[i][0];if(copy)copy.textContent=story[i][1]});
 }
 function render(){if(window.coverOpen){renderCover();return}$('#app').dataset.page=state.page;$('#app').innerHTML=(pages[state.page]||explore)();refineRoiStory();$('#crumb').textContent={explore:'Explore the store',hq:'Connect the chain',optimize:'Optimize operations',deploy:'Deploy the solution',prove:'Case study'}[state.page];bind();persist();if(window.scheduleFit)scheduleFit()}
-$('#export').onclick=()=>download('milesight-multisite-project.json',JSON.stringify({exportedAt:new Date().toISOString(),state},null,2),'application/json');
 $('#fullscreen').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
