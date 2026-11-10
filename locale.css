@@ -1,0 +1,9 @@
+.locale-switch{display:flex;align-items:center;height:28px;padding:2px;border:1px solid #cbdde6;border-radius:7px;background:#fff}
+.locale-switch button{height:22px;padding:0 8px;border:0;border-radius:5px;background:transparent;color:#6a8391;font-size:8px;font-weight:800;cursor:pointer}
+.locale-switch button.active{background:#0b71b4;color:#fff}
+html[lang="ja"] body{font-family:Inter,"Noto Sans JP","Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN",Meiryo,sans-serif}
+html[lang="ja"] .nav span{letter-spacing:0}
+html[lang="ja"] .nav small{line-height:1.25}
+html[lang="ja"] .page-title h1{letter-spacing:-.04em}
+html[lang="ja"] .product-card p,html[lang="ja"] .case-device-copy p{line-height:1.35}
+@media(max-width:760px){.locale-switch button{padding:0 5px}.locale-switch{height:26px}}

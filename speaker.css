@@ -1,0 +1,127 @@
+/* Presentation-first layout for laptop screens.
+   The detailed content remains in the DOM, while the visible hierarchy favors
+   the story, decision, product and outcome that matter during a live talk. */
+
+body{font-size:15px}
+/* The ROI story remains readable in a self-contained scrolling panel. */
+#app .case-study-roi{overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;overscroll-behavior:contain}
+#app .case-study-roi>*{flex-shrink:0}
+#app .case-study-roi .roi-how span{display:block;font-size:12px;line-height:1.5;margin-top:5px}
+#app .case-study-roi .roi-how b{font-size:13px;line-height:1.4}
+#app .case-study-roi .roi-how ol{gap:16px 14px}
+#app .case-study-roi .roi-how{padding:14px;margin-bottom:12px}
+#app .case-study-roi .roi-how h3{font-size:16px;margin-bottom:12px}
+#app .case-study-roi .roi-evidence-note p{display:block;font-size:11px;line-height:1.5}
+.sidebar{width:176px;padding:20px 12px}
+.brand{padding:0 5px}.brand img{width:142px}
+.workspace{margin:22px 6px 14px;font-size:9px}.workspace span{display:none}
+.sidebar nav{gap:4px}.sidebar nav:before{left:19px;top:25px;bottom:25px}
+.nav{min-height:58px;gap:9px;padding:8px 6px}
+.nav b{width:28px;height:28px;font-size:10px}
+.nav span{font-size:13px;line-height:1.15}.nav small{display:none}
+.side-note{padding:13px 6px 0;font-size:8px}.side-note p{font-size:14px;line-height:1.45;margin:7px 0}.side-note small{display:none}
+main{margin-left:176px;padding:0 18px}
+header{height:48px;min-height:48px}.breadcrumb{display:none}
+header{justify-content:flex-end}.actions{align-items:center}
+header .quiet{font-size:11px;padding:7px 10px}
+footer{height:40px;min-height:40px;font-size:9px}
+.slide-controls .quiet,.slide-controls .primary{font-size:11px;padding:7px 12px}
+
+h1{font-size:40px;line-height:1.05}h2{font-size:23px}
+.page-title{margin-bottom:10px;padding-top:6px}.page-title h1{font-size:38px;letter-spacing:-1.25px}
+.page-title p,.case-study-title p{display:none}
+.eyebrow{font-size:11px;letter-spacing:1.45px;margin-bottom:5px}
+.panel{padding:17px;border-radius:15px}
+.lead{font-size:13px;line-height:1.35}
+.section-head{gap:14px}.section-head p{font-size:12px;line-height:1.3}
+
+/* Cover: fewer labels, stronger headline and scenario choice. */
+.cover-copy{padding:42px}.cover-kicker{font-size:11px;margin-bottom:28px}
+.cover-copy h1{font-size:58px;line-height:1.02;margin:12px 0 18px}
+.cover-copy p{font-size:17px;line-height:1.5}.cover-pill-row{display:none}
+.cover-start{width:240px;padding:13px 16px;font-size:14px}
+.cover-visual{padding:27px}.cover-visual>div:first-child h2{font-size:27px}.cover-visual>div:first-child p{font-size:14px}
+.scenario-card{min-width:158px;padding:10px 11px}.scenario-card small{display:none}.scenario-card b{font-size:14px}.scenario-card em{font-size:11px;line-height:1.25}.scenario-icon{width:31px;height:31px}
+
+/* Explore: scene first, then one operational question with readable evidence. */
+.explore-layout{gap:12px}.scene-panel>.section-head h2{font-size:24px}.scene-panel>.section-head p{font-size:12px;max-width:520px}
+.hotspot{padding:5px 10px 5px 5px}.hotspot span{width:25px;height:25px;font-size:11px}.hotspot b{font-size:11px}
+.module-rail{gap:7px;padding-top:9px}.module-rail button{padding:8px 4px;font-size:11px}.module-rail button span{font-size:18px}
+.module-detail .section-head h2{font-size:21px}.module-mark{width:44px;height:44px;font-size:23px}
+.zone-tabs{margin:8px 0 7px}.zone-tabs button{font-size:11px;padding:6px 10px}
+.operational-view{padding:15px;min-height:112px}.operational-view small{font-size:10px}.operational-view strong{font-size:39px}.operational-view span{font-size:13px}.operational-view p{font-size:11px}
+.action-enabled{padding:8px 0;align-items:flex-start}.action-enabled small{font-size:10px}.action-enabled p{font-size:12px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-strip{gap:8px}.product-card{grid-template-columns:70px 1fr;padding:8px}.product-card b{font-size:13px}.product-card span{font-size:10px}.product-card p{display:none}.product-visual{min-height:67px}
+.scene-caption small,.people-data-title span,.people-footnote{display:none}.scene-caption b{font-size:14px}.scene-caption span{font-size:10px}
+.install-device small{font-size:8px}.install-device b{font-size:11px}.install-device>img{width:38px;height:35px}
+.people-data-title small{font-size:10px}.people-data-row b{font-size:11px}.people-data-row small{font-size:8px}.people-data-row strong{font-size:18px}
+.people-products .product-card b{font-size:11px}.people-products .product-card span{font-size:9px}
+
+/* Connect the chain: turn tiny control-tower labels into a presenter-readable summary. */
+#app[data-page="hq"] .hq-title h1{font-size:34px}
+.hq-format-switch button{font-size:10px;padding:7px 11px}
+.hq-control-tower{grid-template-rows:68px minmax(0,1fr) 82px 52px}
+.hq-kpi-grid small{font-size:9px}.hq-kpi-grid strong{font-size:25px}.hq-kpi-grid strong span{font-size:11px}.hq-kpi-grid p{font-size:9px}
+.hq-panel-head h2{font-size:19px}.hq-panel-head p{display:none}.hq-metric-tabs button{font-size:9px;padding:6px 9px}
+.hq-peer-band span,.hq-chart-summary small{font-size:8px}.hq-bar-item b{font-size:8px}.hq-bar-value{font-size:7px}.hq-chart-summary b,.hq-chart-summary p{font-size:9px}
+.hq-count{font-size:8px}.hq-severity{font-size:8px}
+.hq-exception-list small{font-size:7px}.hq-exception-list b{font-size:11px}.hq-exception-list p{font-size:8px}
+.hq-action-card small{font-size:7px}.hq-action-card b{font-size:11px}.hq-action-card p{font-size:8px}.hq-action-card span{font-size:7px}
+.hq-store-card small{font-size:7px}.hq-store-card b{font-size:14px}.hq-store-card p,.hq-store-card em{font-size:8px}.hq-more-stores span{font-size:8px}
+.hq-loop b{font-size:8px}.hq-loop span{display:none}.hq-loop small{font-size:7px;width:20px;height:20px}
+
+/* Optimize: menu as large keywords; the selected visual carries the explanation. */
+.optimize-layout{grid-template-columns:280px minmax(0,1fr);gap:12px}
+.automation-list{gap:8px}.automation-list button{padding:13px 12px;min-height:54px}.automation-list button>span{font-size:12px}.automation-list b{font-size:13px}.automation-list p{display:none}.automation-list i{font-size:16px}
+.automation-detail{padding:16px}.viz-heading h3,.hvac-day-heading h3{font-size:21px}.viz-heading small,.hvac-day-heading small{font-size:9px}.viz-heading p,.hvac-day-heading p{font-size:11px;max-width:390px}
+.playbook-viz,.hvac-day{height:calc(100% - 58px)}
+.store-state-label,.hvac-output-label{font-size:9px}.store-state-bar span{font-size:9px}
+.viz-value-strip small,.benchmark-kpis small,.traffic-kpi-grid small,.traffic-card-head small{font-size:8px}.viz-value-strip b,.benchmark-kpis span,.traffic-kpi-grid span{font-size:10px}.benchmark-kpis strong,.traffic-kpi-grid strong{font-size:22px}
+.chart-legend,.benchmark-legend,.iaq-legend,.traffic-legend{font-size:9px}
+.hvac-signal-flow small,.diagnostic-flow small{font-size:8px}.hvac-signal-flow b,.diagnostic-flow b{font-size:11px}
+.load-status-grid small{font-size:9px}.load-status-grid b{font-size:14px}.load-status-grid p{font-size:10px}
+.signal-card>div:first-child small{font-size:9px}.signal-card>div:first-child strong{font-size:27px}.signal-card>div:first-child span{font-size:9px}
+.maintenance-outcome b{font-size:10px}.maintenance-outcome p{font-size:12px}.maintenance-outcome span{font-size:9px}
+.iaq-response-grid small{font-size:8px}.iaq-response-grid b{font-size:11px}
+.traffic-business-values b,.traffic-value-grid b{font-size:11px}.traffic-business-values span,.traffic-value-grid span{font-size:9px}.traffic-value-grid small{font-size:8px}
+
+/* Deploy: emphasize the four layers and gateway choices, not the explanatory fine print. */
+#app[data-page="deploy"] .deploy-body{padding:15px;height:calc(100% - 66px)}
+.deploy-tabs button{font-size:11px;padding:8px 14px}
+.topology-head h2,.rollout-head h2{font-size:22px}.rollout-head p,.gateway-picker-head p{display:none}.topology-scenario{font-size:9px}
+.topology-node>small{font-size:10px}.topology-node h3{font-size:16px}.topology-module-list span{font-size:10px}.topology-direct-note{font-size:8px}
+.gateway-node strong{font-size:25px}.gateway-node b{font-size:11px}.gateway-node p{display:none}
+.route-choice span{font-size:8px}.route-choice b{font-size:12px}.route-choice p{display:none}.route-node>em{font-size:8px}
+.customer-platform-node h3,.hq-node h3{font-size:14px}.customer-platform-node>div span,.hq-node span{font-size:9px}
+.gateway-picker-head b{font-size:13px}.gateway-option-copy>span{font-size:10px}.gateway-option-copy>strong{font-size:28px}.gateway-option-copy>b{font-size:11px}.gateway-keywords em{font-size:9px}.gateway-option-copy>a{font-size:9px}
+.gateway-option{grid-template-columns:112px minmax(0,1fr);padding:11px;gap:11px}.gateway-option-image{width:108px;height:128px}.gateway-option-image img{max-width:100px;max-height:118px}
+.topology-value-strip b{font-size:11px}.topology-value-strip span{font-size:9px}
+.rollout-module-card h3{font-size:16px}.rollout-module-card header p{display:none}.rollout-product{grid-template-columns:40px 1fr;min-height:43px}.rollout-product-image{width:39px;height:39px}.rollout-product-image img{max-width:35px;max-height:35px}.rollout-product b{font-size:11px}.rollout-product span{font-size:8px}.rollout-connectivity span,.rollout-connectivity b,.rollout-connectivity p{font-size:10px}
+.pilot-list b,.pilot-path b{font-size:13px}.pilot-path p{font-size:11px}.pilot-path span{font-size:11px}
+.checklist-layout{width:100%;align-self:center;align-items:start}.checklist-layout>.panel{min-height:390px}
+
+/* Case study: keep the project, investment and return readable from a distance. */
+.case-study-title{margin-bottom:9px}.case-study-title h1{font-size:35px}.case-study-badge{font-size:10px}
+.case-study-head h2{font-size:20px}.case-study-head span{font-size:9px}.case-study-head p{display:none}
+.case-device-copy small{font-size:8px}.case-device-copy strong{font-size:21px}.case-device-copy b{font-size:11px}.case-device-copy p{display:none}.case-device-copy span{font-size:8px}
+.case-solution-flow span{font-size:10px}
+.case-study-roi .section-head h2{font-size:21px}
+.roi-baseline small{font-size:8px}.roi-baseline strong{font-size:22px}
+.roi-saving-bridge small{font-size:8px}.roi-saving-bridge strong{font-size:18px}.roi-saving-bridge span{font-size:9px}
+.roi-results.fixed strong{font-size:27px}.roi-results small{font-size:9px}.roi-results span{font-size:9px}
+.roi-how h3{font-size:13px}.roi-how b{font-size:11px}.roi-how span{display:none}.roi-how li{min-height:24px;padding-left:27px}.roi-how li:before{width:21px;height:21px;font-size:9px}
+.roi-uplift small{font-size:8px}.roi-uplift strong{font-size:23px}.roi-uplift span{font-size:8px}.roi-evidence-note b{font-size:10px}.roi-evidence-note p{display:none}.roi-evidence-note a{font-size:8px}
+
+@media(max-height:730px){
+  .sidebar{padding-top:14px;padding-bottom:12px}.workspace{margin-top:16px}.nav{min-height:52px}
+  header{height:42px;min-height:42px}footer{height:36px;min-height:36px}
+  .page-title h1{font-size:34px}.page-title{margin-bottom:7px}
+  .cover-copy h1{font-size:51px}.cover-copy p{font-size:15px}
+  .hq-control-tower{grid-template-rows:60px minmax(0,1fr) 70px 44px}
+  .case-device-copy strong{font-size:18px}.roi-how{padding:6px 8px}.roi-saving-bridge>div{padding:6px}
+}
+
+@media(max-width:1100px){
+  .sidebar{width:152px;padding-left:9px;padding-right:9px}.brand img{width:128px}.nav span{font-size:11px}
+  main{margin-left:152px;padding:0 12px}.sidebar nav:before{left:16px}
+}

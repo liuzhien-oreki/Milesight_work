@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Milesight · Smart Multi-Site Business Solutions</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="presentation.css">
+  <link rel="stylesheet" href="scene-overrides.css">
+  <link rel="stylesheet" href="guide.css">
+  <link rel="stylesheet" href="locale.css">
+  <link rel="stylesheet" href="speaker.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="Milesight"><img src="assets/milesight-official-logo.png" alt="Milesight"></a>
+    <div class="workspace">SMART MULTI-SITE<span>SOLUTION EXPLORER</span></div>
+    <nav aria-label="Presentation chapters">
+      <button class="nav" data-step="-1"><b>⌂</b><span>Overview<small>Choose a business scenario</small></span></button>
+      <button class="nav" data-step="0"><b>01</b><span>Explore the store<small>Single-site visibility</small></span></button>
+      <button class="nav" data-step="1"><b>02</b><span>Connect the chain<small>Coordinate from HQ</small></span></button>
+      <button class="nav" data-step="2"><b>03</b><span>Optimize operations<small>Turn insight into action</small></span></button>
+      <button class="nav" data-step="3"><b>04</b><span>Deploy the solution<small>Architecture, BOM & pilot</small></span></button>
+      <button class="nav" data-step="4"><b>05</b><span>Case study<small>Project solution & ROI</small></span></button>
+    </nav>
+    <div class="side-note"><span class="dot"></span> CONNECTED OPERATIONS<p>One site.<br>Every location.</p><small>Monitor · Alert · Control</small></div>
+  </aside>
+  <main>
+    <header>
+      <div class="breadcrumb">Solutions / Multi-Site / <b id="crumb">Overview</b></div>
+      <div class="actions"><div class="locale-switch" id="locale-switch" aria-label="Language"><button data-lang="en">EN</button><button data-lang="ja">日本語</button></div><button class="quiet guide-trigger" id="guide-open" aria-label="Open presenter guide" title="Presenter guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v12.5H7.5A2.5 2.5 0 0 1 5 17V4.5Z"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg></button><button class="quiet" id="fullscreen">⛶ Full screen</button><button class="quiet" id="export">Export project ↗</button></div>
+    </header>
+    <div id="deck-viewport"><div id="slide"><div id="app"></div></div></div>
+    <footer><span>Milesight · Smart Multi-Site Business Solutions</span><div class="slide-controls"><button class="quiet" id="previous" aria-label="Previous chapter">←</button><span id="slide-number">OVERVIEW</span><button class="primary" id="next" aria-label="Next chapter">Explore the store →</button></div></footer>
+  </main>
+  <dialog id="editor"><form method="dialog"><div class="section-head"><h2>Edit planning content</h2><button class="quiet" aria-label="Close editor">✕</button></div><p>Keep product mapping, pricing and evidence aligned with the approved project scope.</p><div id="edit-fields"></div><div class="actions"><button type="button" class="primary" id="save-edit">Save changes</button><button class="quiet">Cancel</button></div></form></dialog>
+  <div class="guide-scrim" id="guide-scrim" hidden></div>
+  <aside class="guide-drawer" id="guide-drawer" aria-hidden="true" aria-label="Presenter guide">
+    <button class="guide-resizer" id="guide-resizer" aria-label="Resize presenter guide"></button>
+    <div class="guide-head"><div><span>PRESENTER GUIDE</span><h2>使用说明与演讲稿</h2></div><div class="guide-head-actions"><a href="guide-editor.html" target="_blank" aria-label="Edit presenter guide" title="Edit presenter guide">✎</a><button id="guide-smaller" aria-label="Decrease text size" title="Decrease text size">A−</button><button id="guide-larger" aria-label="Increase text size" title="Increase text size">A＋</button><button id="guide-close" aria-label="Close presenter guide" title="Close">✕</button></div></div>
+    <div class="guide-tools"><label for="guide-outline">快速跳转</label><select id="guide-outline"><option value="">选择章节</option></select></div>
+    <div class="guide-content" id="guide-content"><p class="guide-loading">Loading presenter guide…</p></div>
+  </aside>
+  <div id="toast" role="status"></div>
+  <script src="data.js"></script><script src="app.js"></script><script src="presentation.js"></script><script src="guide.js"></script><script src="locale-ja.js"></script>
+</body>
+</html>

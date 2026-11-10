@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>编辑使用说明 · Milesight</title>
+  <link rel="stylesheet" href="guide-editor.css">
+</head>
+<body>
+  <header class="editor-bar">
+    <div class="editor-brand"><img src="assets/milesight-official-logo.png" alt="Milesight"><div><span>PRESENTER GUIDE EDITOR</span><h1>编辑使用说明与演讲稿</h1></div></div>
+    <div class="editor-actions"><span class="save-state" id="save-state">正在载入…</span><button id="reset" class="secondary">恢复服务器版本</button><button id="download" class="secondary">下载 MD</button><button id="save" class="primary">保存到当前浏览器</button><a href="./" class="secondary">返回方案 ↗</a></div>
+  </header>
+  <div class="editor-notice"><b>保存范围：</b>修改内容保存在当前浏览器中，并会覆盖本浏览器讲稿面板的显示；不会直接改写服务器上的公共版本。需要正式发布时，请下载 MD 后替换服务器文件。</div>
+  <main class="editor-layout">
+    <section class="editor-pane"><div class="pane-head"><b>MARKDOWN</b><span id="word-count">0 characters</span></div><textarea id="source" spellcheck="false" aria-label="Markdown source"></textarea></section>
+    <section class="preview-pane"><div class="pane-head"><b>PREVIEW</b><span>实时预览</span></div><article id="preview"></article></section>
+  </main>
+  <script src="guide-editor.js"></script>
+</body>
+</html>

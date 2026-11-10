@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Traffic Analytics & Smart Operations</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#111827',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        brand: {
+                            blue: '#235fa5',
+                            cyan: '#00a7d5',
+                            emerald: '#24856f',
+                            amber: '#d98a35',
+                            rose: '#f43f5e',
+                            purple: '#8b5cf6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        
+        /* Flow animation on heatmap SVG */
+        @keyframes flowAnimation {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-line {
+            stroke-dasharray: 6, 6;
+            animation: flowAnimation 1.5s linear infinite;
+        }
+
+        /* Radar pulse effect */
+        @keyframes radarPulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .radar-pulse {
+            animation: radarPulse 2s infinite ease-in-out;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        
+        .glass-panel-hover:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15);
+        }
+    </style>
+
+<style id="milesight-embedded-theme">
+  html{width:100%;height:100%;overflow:hidden;background:#edf4f7}
+  body{position:absolute;left:0;top:0;width:1200px;height:660px;min-height:0!important;margin:0!important;padding:10px!important;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:58px 92px 1fr;grid-template-areas:"header header" "kpis kpis" "trend floor";gap:8px!important;background:#edf4f7!important;color:#183847!important;transform-origin:top left}
+  body>header{grid-area:header;min-height:0;padding:12px 15px!important}
+  body>header{flex-direction:row!important;align-items:center!important}
+  body>header>div:last-child{width:auto!important;flex-wrap:nowrap!important}
+  body>section:nth-of-type(1){grid-area:kpis;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;min-height:0;gap:10px!important}
+  body>section:nth-of-type(2){grid-area:trend;display:grid!important;grid-template-columns:2fr 1fr!important;min-height:0;gap:10px!important}
+  body>section:nth-of-type(3){grid-area:floor;display:grid!important;grid-template-columns:2fr 1fr!important;min-height:0;gap:10px!important}
+  body>section:nth-of-type(2)>div:first-child,body>section:nth-of-type(3)>div:first-child{grid-column:auto!important}
+  html.wide-layout body{width:1600px;height:900px;padding:14px!important;grid-template-columns:1.08fr .92fr;grid-template-rows:76px 125px 1fr;gap:10px!important}
+  html.wide-layout body>section:nth-of-type(2){grid-template-columns:1.45fr 1fr!important}
+  html.wide-layout body>section:nth-of-type(3){grid-template-columns:1.65fr 1fr!important}
+  html.wide-layout header h1{font-size:22px!important}
+  html.wide-layout header>div:first-child{max-width:680px!important}
+  html.wide-layout .h-72,html.wide-layout .sm\:h-80{height:300px!important}
+  html.wide-layout .h-80{height:340px!important}
+  html.wide-layout .p-5{padding:14px!important}
+  html.wide-layout body>section:nth-of-type(2)>div:nth-child(2) .text-sm{font-size:12px!important}
+  body>footer{display:none!important}
+  .glass-panel{background:rgba(255,255,255,.96)!important;border-color:#d6e6ec!important;box-shadow:0 5px 18px rgba(18,49,73,.07)!important;backdrop-filter:none!important}
+  [class*="bg-slate-950"],[class*="bg-slate-900"],[class*="bg-slate-800"]{background-color:#f4f8fa!important}
+  [class*="border-slate-"]{border-color:#d7e5ea!important}
+  .text-white,[class*="text-slate-100"],[class*="text-slate-200"],[class*="text-slate-300"]{color:#183847!important}
+  [class*="text-slate-400"],[class*="text-slate-500"]{color:#6f8490!important}
+  header h1{color:#123149!important}
+  header h1{font-size:18px!important}
+  header p{font-size:9px!important}
+  header>div:first-child{max-width:470px!important}
+  header>div:last-child{gap:6px!important}
+  header select{width:145px!important;padding-left:28px!important;padding-right:22px!important}
+  header p:after{content:" · Staffing · Layout · Campaigns · Store comparison · HVAC & lighting";color:#235fa5;font-weight:600}
+  select,button{background-color:#f5f9fb!important;border-color:#cedfe6!important;color:#183847!important}
+  #refresh-btn{background:#235fa5!important;color:#fff!important}
+  #refresh-btn span,#refresh-btn i{color:#fff!important}
+  #refresh-btn{width:32px!important;padding:0!important}
+  #refresh-btn span{display:none!important}
+  #gdpr-toggle{display:none!important}
+  #dashboard-fullscreen{background:#123149!important;border:1px solid #123149!important;color:#fff!important;white-space:nowrap;padding:8px 10px!important;font-size:10px!important}
+  #dashboard-fullscreen span,#dashboard-fullscreen i{color:#fff!important}
+  .h-72,.sm\:h-80{height:185px!important}
+  .h-80{height:220px!important}
+  .retail-heatmap-scene{padding:0!important;background-image:linear-gradient(rgba(18,49,73,.06),rgba(18,49,73,.14)),url('assets/scenes/retail-store.png')!important;background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important}
+  .retail-heatmap-scene svg{position:relative;z-index:1;width:100%!important;height:100%!important}
+  .retail-heatmap-scene svg>rect:first-of-type,.retail-heatmap-scene svg>line{opacity:0!important}
+  .retail-heatmap-scene .zone-group>rect{fill:#fff!important;fill-opacity:.001!important;stroke:#fff!important;stroke-opacity:.5!important;stroke-width:2!important}
+  .retail-heatmap-scene .zone-group text{display:none!important}
+  section{overflow:hidden}
+  section>.glass-panel{min-height:0}
+  .space-y-5>:not([hidden])~:not([hidden]){margin-top:6px!important}
+  .space-y-3>:not([hidden])~:not([hidden]){margin-top:6px!important}
+  .space-y-2\.5>:not([hidden])~:not([hidden]){margin-top:3px!important}
+  .p-3{padding:6px!important}.p-2\.5{padding:6px!important}
+  body>section:nth-of-type(3)>div:first-child{justify-content:flex-start!important}
+  body>section:nth-of-type(3)>div:last-child>div:first-child .space-y-2\.5>div{padding:4px 6px!important}
+  .p-5{padding:10px!important}.p-4{padding:9px!important}
+  .rounded-2xl{border-radius:12px!important}
+  #toast-container{transform:scale(1.15);transform-origin:top right}
+</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 p-3 md:p-6 space-y-5 antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- 1. Header & Controls -->
+    <header class="glass-panel p-4 rounded-2xl flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border border-slate-800 shadow-xl">
+        <div class="flex items-center gap-3">
+            <div class="p-3 bg-blue-600/20 border border-blue-500/30 rounded-xl text-blue-400">
+                <i class="fa-solid fa-chart-line text-2xl"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white">Retail Traffic Analytics & Smart Operations</h1>
+                    <span id="gdpr-badge" class="hidden text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-mono">
+                        <i class="fa-solid fa-user-shield mr-1"></i>Privacy mode
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Live retail traffic · Last update: <span id="last-update-time" class="font-mono text-slate-300">18:23:05</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+            <!-- Store Selector -->
+            <div class="relative flex-1 sm:flex-none">
+                <i class="fa-solid fa-store absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <select id="store-select" class="w-full bg-slate-900 border border-slate-700/80 hover:border-slate-600 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
+                    <option value="store_a">Retail Flagship A · All zones</option>
+                    <option value="store_b">Mall Store B</option>
+                    <option value="store_c">High Street Store C</option>
+                    <option value="store_d">Community Store D</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+            </div>
+
+            <!-- Date Range Selector -->
+            <div class="relative flex-1 sm:flex-none">
+                <i class="fa-solid fa-calendar-day absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <select id="date-select" class="w-full bg-slate-900 border border-slate-700/80 hover:border-slate-600 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
+                    <option value="today">Today · Live</option>
+                    <option value="yesterday">Yesterday comparison</option>
+                    <option value="this_week">This week</option>
+                    <option value="this_month">This month</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+            </div>
+
+            <!-- GDPR Privacy Mode Toggle -->
+            <button id="gdpr-toggle" class="flex items-center gap-1.5 px-3 py-2 bg-slate-900 border border-slate-700/80 hover:border-slate-600 rounded-xl text-xs font-medium text-slate-300 transition-colors">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                <span class="hidden sm:inline">Privacy</span>
+            </button>
+
+            <!-- Refresh Button -->
+            <button id="refresh-btn" class="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-lg shadow-blue-600/20 transition-all">
+                <i class="fa-solid fa-rotate text-xs" id="refresh-icon"></i>
+                <span>Refresh</span>
+            </button>
+            <button id="dashboard-fullscreen" class="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all" type="button" aria-label="Enter full screen">
+                <i class="fa-solid fa-expand"></i>
+                <span>Full screen</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 2. Hero KPI Grid (5 Cards) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Store entries -->
+        <div class="glass-panel glass-panel-hover p-4 rounded-2xl flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+                <span>Store entries</span>
+                <span class="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20"><i class="fa-solid fa-user-check"></i></span>
+            </div>
+            <div class="my-3 flex items-baseline justify-between">
+                <span id="kpi-in-count" class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-mono">128,450</span>
+                <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
+                    <i class="fa-solid fa-arrow-trend-up text-[10px]"></i> 3.2%
+                </span>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+                <span>vs same period last week: +3,980</span>
+                <svg class="w-16 h-6 stroke-emerald-400 fill-none" viewBox="0 0 50 20">
+                    <path d="M0 15 Q 10 5, 20 12 T 40 4 T 50 8" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Pass-by traffic -->
+        <div class="glass-panel glass-panel-hover p-4 rounded-2xl flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+                <span>Pass-by traffic</span>
+                <span class="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20"><i class="fa-solid fa-users-line"></i></span>
+            </div>
+            <div class="my-3 flex items-baseline justify-between">
+                <span id="kpi-pass-count" class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-mono">452,100</span>
+                <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
+                    <i class="fa-solid fa-arrow-trend-up text-[10px]"></i> 1.5%
+                </span>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+                <span>Storefront and mall corridor</span>
+                <svg class="w-16 h-6 stroke-purple-400 fill-none" viewBox="0 0 50 20">
+                    <path d="M0 12 Q 12 18, 25 8 T 50 5" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Entry conversion -->
+        <div class="glass-panel glass-panel-hover p-4 rounded-2xl flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+                <span>Entry conversion</span>
+                <span class="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"><i class="fa-solid fa-filter"></i></span>
+            </div>
+            <div class="my-3 flex items-baseline justify-between">
+                <span id="kpi-conversion" class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-mono">28.4%</span>
+                <span class="text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
+                    <i class="fa-solid fa-arrow-trend-down text-[10px]"></i> 0.8%
+                </span>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+                <span>Previous period: 29.2%</span>
+                <svg class="w-16 h-6 stroke-rose-400 fill-none" viewBox="0 0 50 20">
+                    <path d="M0 5 Q 15 15, 30 8 T 50 14" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Average dwell time -->
+        <div class="glass-panel glass-panel-hover p-4 rounded-2xl flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+                <span>Average dwell time</span>
+                <span class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20"><i class="fa-regular fa-clock"></i></span>
+            </div>
+            <div class="my-3 flex items-baseline justify-between">
+                <div class="flex items-baseline gap-1">
+                    <span id="kpi-dwell-time" class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-mono">4.5</span>
+                    <span class="text-xs text-slate-400">min</span>
+                </div>
+                <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
+                    <i class="fa-solid fa-arrow-trend-up text-[10px]"></i> 0.3m
+                </span>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+                <span>Visits over 3 min: 42%</span>
+                <svg class="w-16 h-6 stroke-amber-400 fill-none" viewBox="0 0 50 20">
+                    <path d="M0 16 Q 10 18, 25 10 T 50 3" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Live occupancy and capacity -->
+        <div class="glass-panel glass-panel-hover p-4 rounded-2xl flex flex-col justify-between relative overflow-hidden group transition-all duration-300 border-amber-500/30">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+                <span>Live occupancy</span>
+                <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] border border-amber-500/30 font-semibold animate-pulse" id="occupancy-status-badge">
+                    Within policy
+                </span>
+            </div>
+            <div class="my-2">
+                <div class="flex items-baseline justify-between">
+                    <span id="kpi-occupancy" class="text-2xl lg:text-3xl font-extrabold text-amber-400 tracking-tight font-mono">4,230</span>
+                    <span class="text-xs text-slate-400 font-mono">/ 5,000 capacity</span>
+                </div>
+                <!-- Capacity Progress Bar -->
+                <div class="w-full bg-slate-800 h-2 rounded-full mt-2 overflow-hidden p-0.5 border border-slate-700">
+                    <div id="occupancy-bar" class="bg-gradient-to-r from-blue-500 via-amber-400 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 84.6%;"></div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+                <span>Density: <span id="density-val" class="text-slate-200 font-mono">0.85</span> person / m²</span>
+                <span class="text-amber-400/90 text-[10px]"><i class="fa-solid fa-triangle-exclamation mr-0.5"></i>84.6% occupied</span>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 3. Middle Section: Traffic Tide Chart & Funnel Analysis -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        
+        <!-- Hourly Traffic Tide Chart (2 Columns) -->
+        <div class="lg:col-span-2 glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-blue-400"></i> Hourly Traffic & Occupancy Trend
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Compare current entries, the previous-period average and live occupancy.</p>
+                </div>
+                <div class="flex items-center gap-3 text-xs">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-sm bg-blue-500 inline-block"></span>
+                        <span class="text-slate-300">Today entries</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-sm bg-slate-600 inline-block"></span>
+                        <span class="text-slate-400">Previous-period average</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-0.5 bg-amber-400 inline-block"></span>
+                        <span class="text-slate-300">Live occupancy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas Chart -->
+            <div class="relative w-full h-72 sm:h-80">
+                <canvas id="trafficTideChart"></canvas>
+            </div>
+
+            <!-- Peak Hours Summary Footer -->
+            <div class="mt-4 pt-3 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 block text-[10px]">Peak hour</span>
+                    <span class="font-bold text-blue-400 font-mono">14:00 - 15:00</span>
+                </div>
+                <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 block text-[10px]">Peak hourly entries</span>
+                    <span class="font-bold text-emerald-400 font-mono">18,920 </span>
+                </div>
+                <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 block text-[10px]">Traffic valley</span>
+                    <span class="font-bold text-slate-300 font-mono">09:00 (1,200)</span>
+                </div>
+                <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 block text-[10px]">Staffing action</span>
+                    <span class="font-bold text-amber-400">Add 2 associates at peak</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales & Conversion Funnel Card -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-filter-circle-dollar text-cyan-400"></i> Traffic-to-Purchase Funnel
+                    </h2>
+                    <span class="text-[11px] text-cyan-400 font-mono bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">POS connected</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">See where customers drop from storefront traffic to checkout.</p>
+
+                <!-- Interactive Visual Funnel Layers -->
+                <div class="space-y-3 relative my-2">
+                    <!-- Layer 1: Pass-by -->
+                    <div class="relative bg-gradient-to-r from-purple-900/40 to-slate-900 p-3 rounded-xl border border-purple-500/30 transition-transform hover:scale-[1.02]">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-semibold text-purple-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-shoe-prints"></i> 1. Pass-by traffic
+                            </span>
+                            <span class="text-sm font-bold font-mono text-white">452,100 </span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-purple-500 h-full w-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Funnel Arrow -->
+                    <div class="text-center text-slate-500 text-[10px] -my-1 font-mono">
+                        ↓ Entry conversion: <span class="text-cyan-400 font-bold">28.4%</span> (71.6% did not enter)
+                    </div>
+
+                    <!-- Layer 2: In Store -->
+                    <div class="relative bg-gradient-to-r from-blue-900/40 to-slate-900 p-3 rounded-xl border border-blue-500/30 ml-3 mr-3 transition-transform hover:scale-[1.02]">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-semibold text-blue-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-door-open"></i> 2. Store entries (In)
+                            </span>
+                            <span class="text-sm font-bold font-mono text-white">128,450 </span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-blue-500 h-full w-[70%]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Funnel Arrow -->
+                    <div class="text-center text-slate-500 text-[10px] -my-1 font-mono">
+                        ↓ Engaged-visit rate: <span class="text-amber-400 font-bold">42.0%</span> (dwell >3 min)
+                    </div>
+
+                    <!-- Layer 3: Dwell > 3min -->
+                    <div class="relative bg-gradient-to-r from-amber-900/40 to-slate-900 p-3 rounded-xl border border-amber-500/30 ml-6 mr-6 transition-transform hover:scale-[1.02]">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-semibold text-amber-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-stopwatch"></i> 3. Engaged visits (Dwell&gt;3m)
+                            </span>
+                            <span class="text-sm font-bold font-mono text-white">53,949 </span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-amber-500 h-full w-[45%]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Funnel Arrow -->
+                    <div class="text-center text-slate-500 text-[10px] -my-1 font-mono">
+                        ↓ Purchase conversion: <span class="text-emerald-400 font-bold">34.5%</span>
+                    </div>
+
+                    <!-- Layer 4: POS Transactions -->
+                    <div class="relative bg-gradient-to-r from-emerald-900/40 to-slate-900 p-3 rounded-xl border border-emerald-500/40 ml-9 mr-9 transition-transform hover:scale-[1.02]">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-semibold text-emerald-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-receipt"></i> 4. POS transactions
+                            </span>
+                            <span class="text-sm font-bold font-mono text-emerald-400">18,625 </span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full w-[25%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key POS Metrics Box -->
+            <div class="mt-4 pt-3 border-t border-slate-800 grid grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 text-[10px] block">Overall purchase conversion</span>
+                    <span class="text-base font-bold font-mono text-emerald-400">14.5%</span>
+                    <span class="text-[10px] text-slate-500 block">Transactions ÷ Store entries</span>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 text-[10px] block">Traffic productivity</span>
+                    <span class="text-base font-bold font-mono text-blue-400">￥86.2 <span class="text-[10px] text-slate-400 font-normal">/</span></span>
+                    <span class="text-[10px] text-slate-500 block">Sales ÷ store entries</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 4. Bottom Section: Floorplan Heatmap & Zone Matrix + HVAC Linkage -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        
+        <!-- Floor Plan Heatmap & Flow Trails (2 Columns) -->
+        <div class="lg:col-span-2 glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-rose-400"></i> Retail Floor Heatmap & Visitor Paths
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Select a zone to inspect occupancy, dwell and movement relationships.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[11px] text-slate-400">Heat level:</span>
+                    <div class="flex items-center gap-1 text-[10px] font-mono">
+                        <span class="w-3 h-3 rounded bg-blue-500/60 inline-block"></span> Low
+                        <span class="w-3 h-3 rounded bg-amber-500/70 inline-block"></span> Medium
+                        <span class="w-3 h-3 rounded bg-rose-500/80 inline-block"></span> High
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floorplan SVG Canvas Container -->
+            <div class="retail-heatmap-scene relative w-full h-80 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center group">
+                
+                <!-- SVG Floorplan -->
+                <svg viewBox="0 0 800 400" class="w-full h-full object-contain">
+                    <defs>
+                        <!-- Radial Heat Gradients -->
+                        <radialGradient id="heat-high" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.75" />
+                            <stop offset="60%" stop-color="#d98a35" stop-opacity="0.4" />
+                            <stop offset="100%" stop-color="#f43f5e" stop-opacity="0" />
+                        </radialGradient>
+
+                        <radialGradient id="heat-medium" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#d98a35" stop-opacity="0.65" />
+                            <stop offset="70%" stop-color="#235fa5" stop-opacity="0.3" />
+                            <stop offset="100%" stop-color="#d98a35" stop-opacity="0" />
+                        </radialGradient>
+
+                        <radialGradient id="heat-low" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#235fa5" stop-opacity="0.6" />
+                            <stop offset="100%" stop-color="#235fa5" stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+
+                    <!-- Store Outline Grid & Walls -->
+                    <rect x="20" y="20" width="760" height="360" rx="12" fill="#090d16" stroke="#1e293b" stroke-width="3" />
+                    
+                    <!-- Corridor grid lines -->
+                    <line x1="200" y1="20" x2="200" y2="380" stroke="#1e293b" stroke-width="2" stroke-dasharray="4,4" />
+                    <line x1="560" y1="20" x2="560" y2="380" stroke="#1e293b" stroke-width="2" stroke-dasharray="4,4" />
+                    <line x1="200" y1="200" x2="780" y2="200" stroke="#1e293b" stroke-width="2" stroke-dasharray="4,4" />
+
+                    <!-- Zone A: Main Entrance & Atrium (Hot Spot) -->
+                    <g class="cursor-pointer zone-group" data-zone="entrance" onclick="selectZone('mainEntrance')">
+                        <rect x="330" y="285" width="140" height="90" rx="8" fill="#1e293b" fill-opacity="0.3" stroke="#334155" stroke-width="1.5" class="hover:stroke-blue-400 transition-colors"/>
+                        <circle cx="400" cy="330" r="82" fill="url(#heat-high)" class="radar-pulse" />
+                        <text x="105" y="180" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">Entrance</text>
+                        <text x="105" y="205" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle">Live: 1,420</text>
+                        <text x="105" y="225" fill="#94a3b8" font-size="10" text-anchor="middle">Density: 1.2person / m²</text>
+                    </g>
+
+                    <!-- Zone B: Central Atrium Exhibition (High Traffic) -->
+                    <g class="cursor-pointer zone-group" data-zone="atrium" onclick="selectZone('atrium')">
+                        <rect x="310" y="135" width="190" height="150" rx="8" fill="#1e293b" fill-opacity="0.3" stroke="#334155" stroke-width="1.5" class="hover:stroke-blue-400 transition-colors"/>
+                        <circle cx="400" cy="205" r="92" fill="url(#heat-high)" />
+                        <text x="380" y="90" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">Core display zone</text>
+                        <text x="380" y="112" fill="#d98a35" font-size="11" font-weight="bold" text-anchor="middle">Occupancy: 1,850 | Dwell: 8.2m</text>
+                        <text x="380" y="130" fill="#94a3b8" font-size="10" text-anchor="middle">Traffic share: 42.5% (highest)</text>
+                    </g>
+
+                    <!-- Zone C: Digital & Electronics Showcase -->
+                    <g class="cursor-pointer zone-group" data-zone="digital" onclick="selectZone('digital')">
+                        <rect x="130" y="145" width="190" height="170" rx="8" fill="#1e293b" fill-opacity="0.3" stroke="#334155" stroke-width="1.5" class="hover:stroke-blue-400 transition-colors"/>
+                        <circle cx="240" cy="220" r="72" fill="url(#heat-medium)" />
+                        <text x="380" y="275" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">Feature display zone</text>
+                        <text x="380" y="297" fill="#235fa5" font-size="11" text-anchor="middle">Occupancy: 640 | Dwell: 5.1m</text>
+                    </g>
+
+                    <!-- Zone D: Fashion & Rest Area (Low Traffic) -->
+                    <g class="cursor-pointer zone-group" data-zone="fashion" onclick="selectZone('fashion')">
+                        <rect x="500" y="145" width="200" height="170" rx="8" fill="#1e293b" fill-opacity="0.3" stroke="#334155" stroke-width="1.5" class="hover:stroke-blue-400 transition-colors"/>
+                        <circle cx="590" cy="225" r="68" fill="url(#heat-low)" />
+                        <text x="670" y="170" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">Essentials zone</text>
+                        <text x="670" y="192" fill="#38bdf8" font-size="11" text-anchor="middle">Occupancy: 320 | Dwell: 3.0m</text>
+                        <text x="670" y="212" fill="#94a3b8" font-size="10" text-anchor="middle">Low traffic · review layout</text>
+                    </g>
+
+                    <!-- Animated Flow Arrow Lines (Path Trails) -->
+                    <!-- Main Entrance -> Atrium -->
+                    <path d="M 400 330 C 400 285, 395 250, 400 215" stroke="#235fa5" stroke-width="3" class="flow-line" />
+                    <!-- Atrium -> Digital Zone -->
+                    <path d="M 370 215 C 330 215, 290 218, 250 220" stroke="#235fa5" stroke-width="3" class="flow-line" />
+                    <!-- Atrium -> Fashion Zone -->
+                    <path d="M 430 215 C 480 218, 535 222, 585 228" stroke="#d98a35" stroke-width="2" class="flow-line" />
+                </svg>
+
+                <!-- Floating Overlay Instruction -->
+                <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-hand-pointer text-blue-400 animate-bounce"></i>
+                    <span>Selected: <strong id="selected-zone-name" class="text-white">Core display zone</strong></span>
+                </div>
+            </div>
+
+            <!-- Flow Distribution Footer Bar -->
+            <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+                <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <span class="text-slate-400">Entrance → Core display:</span>
+                    <span class="font-bold text-blue-400 font-mono">68.2% (primary path)</span>
+                </div>
+                <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <span class="text-slate-400">Core → Feature display:</span>
+                    <span class="font-bold text-cyan-400 font-mono">22.4%</span>
+                </div>
+                <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <span class="text-slate-400">Essentials dwell share:</span>
+                    <span class="font-bold text-rose-400 font-mono">9.4% (cold zone)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Stack: Zone Matrix + Milesight HVAC Linkage -->
+        <div class="space-y-5 flex flex-col justify-between">
+            
+            <!-- Zone Ranking Matrix -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-400"></i> Zone Performance Ranking
+                    </h2>
+                    <span class="text-[10px] text-slate-400">by traffic share / dwell</span>
+                </div>
+
+                <div class="space-y-2.5 text-xs">
+                    <!-- Zone Rank Item 1 -->
+                    <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800/80 flex items-center justify-between hover:border-slate-700 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-5 h-5 rounded-md bg-amber-500/20 text-amber-400 font-bold font-mono text-[11px] flex items-center justify-center border border-amber-500/30">1</span>
+                            <div>
+                                <span class="font-semibold text-white block">Core display zone</span>
+                                <span class="text-[10px] text-slate-400">Dwell avg 8.2min | 1,850</span>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono">
+                            <span class="font-bold text-amber-400 block">42.5%</span>
+                            <span class="text-[9px] text-emerald-400">↑ 4.1%</span>
+                        </div>
+                    </div>
+
+                    <!-- Zone Rank Item 2 -->
+                    <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800/80 flex items-center justify-between hover:border-slate-700 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-5 h-5 rounded-md bg-slate-700 text-slate-300 font-bold font-mono text-[11px] flex items-center justify-center">2</span>
+                            <div>
+                                <span class="font-semibold text-white block">Entrance zone</span>
+                                <span class="text-[10px] text-slate-400">Dwell avg 2.1min | 1,420</span>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono">
+                            <span class="font-bold text-blue-400 block">28.1%</span>
+                            <span class="text-[9px] text-emerald-400">↑ 1.2%</span>
+                        </div>
+                    </div>
+
+                    <!-- Zone Rank Item 3 -->
+                    <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800/80 flex items-center justify-between hover:border-slate-700 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-5 h-5 rounded-md bg-slate-700 text-slate-300 font-bold font-mono text-[11px] flex items-center justify-center">3</span>
+                            <div>
+                                <span class="font-semibold text-white block">Feature display zone</span>
+                                <span class="text-[10px] text-slate-400">Dwell avg 5.1min | 640</span>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono">
+                            <span class="font-bold text-cyan-400 block">18.4%</span>
+                            <span class="text-[9px] text-rose-400">↓ 0.5%</span>
+                        </div>
+                    </div>
+
+                    <!-- Zone Rank Item 4 -->
+                    <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800/80 flex items-center justify-between hover:border-slate-700 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-5 h-5 rounded-md bg-slate-800 text-slate-500 font-bold font-mono text-[11px] flex items-center justify-center">4</span>
+                            <div>
+                                <span class="font-semibold text-slate-300 block">Essentials zone</span>
+                                <span class="text-[10px] text-slate-400">Dwell avg 3.0min | 320</span>
+                            </div>
+                        </div>
+                        <div class="text-right font-mono">
+                            <span class="font-bold text-slate-400 block">11.0%</span>
+                            <span class="text-[9px] text-rose-400">↓ 2.1%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milesight HVAC Linkage & Energy Saving Card -->
+            <div class="glass-panel p-5 rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 to-slate-900 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            <i class="fa-solid fa-leaf text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-white">Demand-led HVAC & Lighting</h2>
+                            <p class="text-[10px] text-emerald-400/80">Use occupancy context to operate building systems on demand.</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-mono">
+                        Demand response active
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 my-3 text-xs">
+                    <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-400 text-[10px] block">HVAC output</span>
+                        <div class="flex items-baseline justify-between mt-1">
+                            <span id="hvac-fan-speed" class="text-lg font-bold font-mono text-emerald-400">78%</span>
+                            <span class="text-[10px] text-slate-400">Peak response</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-slate-400 text-[10px] block">After-hours runtime avoided</span>
+                        <div class="flex items-baseline justify-between mt-1">
+                            <span id="hvac-energy-save" class="text-lg font-bold font-mono text-cyan-400">18.4%</span>
+                            <span class="text-[10px] text-emerald-400">↓ 320 kWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live IAQ & Air Status -->
+                <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800/80 flex items-center justify-between text-[11px]">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-wind text-slate-400"></i>
+                        <span class="text-slate-300">Indoor CO₂: <strong class="text-white font-mono">680 PPM</strong></span>
+                    </div>
+                    <span class="text-emerald-400 text-[10px] font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>IAQ within policy</span>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Footer Copyright -->
+    <footer class="text-center text-xs text-slate-500 py-3 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <span>© 2026 Passenger Analytics & Smart Energy Platform. All Rights Reserved.</span>
+        <div class="flex items-center gap-4 text-[11px] text-slate-400">
+            <span class="hover:text-slate-200 cursor-pointer"><i class="fa-solid fa-shield-halved mr-1"></i>Data governance</span>
+            <span class="hover:text-slate-200 cursor-pointer"><i class="fa-solid fa-plug mr-1"></i>BMS / POS integration</span>
+            <span class="hover:text-slate-200 cursor-pointer"><i class="fa-solid fa-circle-question mr-1"></i>Help</span>
+        </div>
+    </footer>
+
+    <!-- JavaScript Interactions & Chart Initialization -->
+    <script>
+        // Global State & Data Store
+        let isGdprMode = false;
+        let trafficChart = null;
+
+        // Mock Store Data Variants
+        const storeData = {
+            store_a: {
+                inCount: "128,450",
+                passCount: "452,100",
+                conversion: "28.4%",
+                dwell: "4.5",
+                occupancy: "4,230",
+                occupancyVal: 4230,
+                density: "0.85",
+                chartDataToday: [1200, 3100, 7800, 12400, 15600, 18920, 16400, 14200, 11800, 8500, 4200, 1500],
+                chartDataAvg: [1000, 2800, 7000, 11000, 14000, 16500, 15000, 13000, 10500, 7800, 3800, 1200],
+                chartDataOccupancy: [800, 1500, 3200, 3900, 4100, 4500, 4300, 4230, 3800, 2900, 1800, 600],
+                hvacSpeed: "78%",
+                hvacEnergy: "18.4%"
+            },
+            store_b: {
+                inCount: "86,120",
+                passCount: "310,400",
+                conversion: "27.7%",
+                dwell: "3.8",
+                occupancy: "2,150",
+                occupancyVal: 2150,
+                density: "0.54",
+                chartDataToday: [800, 2100, 5400, 8900, 11200, 13400, 12100, 9800, 7600, 5200, 2800, 900],
+                chartDataAvg: [750, 1900, 5000, 8200, 10500, 12000, 11000, 9000, 7000, 4800, 2500, 800],
+                chartDataOccupancy: [500, 1100, 2100, 2600, 2800, 3100, 2900, 2150, 1800, 1200, 700, 300],
+                hvacSpeed: "62%",
+                hvacEnergy: "22.1%"
+            },
+            store_c: {
+                inCount: "154,890",
+                passCount: "512,000",
+                conversion: "30.2%",
+                dwell: "5.2",
+                occupancy: "4,780",
+                occupancyVal: 4780,
+                density: "0.96",
+                chartDataToday: [1500, 4200, 9800, 15600, 18900, 21500, 19800, 17200, 14100, 9900, 5100, 1800],
+                chartDataAvg: [1300, 3800, 8900, 14000, 17000, 19500, 18000, 15500, 12800, 8900, 4500, 1500],
+                chartDataOccupancy: [900, 2100, 3800, 4400, 4600, 4900, 4850, 4780, 4100, 3100, 1900, 800],
+                hvacSpeed: "92%",
+                hvacEnergy: "14.2%"
+            },
+            store_d: {
+                inCount: "62,300",
+                passCount: "245,000",
+                conversion: "25.4%",
+                dwell: "3.2",
+                occupancy: "1,820",
+                occupancyVal: 1820,
+                density: "0.42",
+                chartDataToday: [500, 1400, 3800, 6200, 8100, 9800, 8900, 7200, 5400, 3800, 1900, 600],
+                chartDataAvg: [450, 1300, 3500, 5800, 7500, 9000, 8200, 6800, 5000, 3500, 1700, 500],
+                chartDataOccupancy: [300, 800, 1500, 1900, 2100, 2300, 2100, 1820, 1400, 900, 500, 200],
+                hvacSpeed: "45%",
+                hvacEnergy: "28.5%"
+            }
+        };
+
+        // Zone Click Data Details
+        const zoneDetails = {
+            mainEntrance: {
+                name: "Entrance zone",
+                msg: "Entrance traffic is flowing normally with no congestion risk."
+            },
+            atrium: {
+                name: "1F Core display zone",
+                msg: "The core display is the strongest zone by traffic share and dwell time."
+            },
+            digital: {
+                name: "Feature display zone",
+                msg: "Engaged visits are increasing in the feature display zone."
+            },
+            fashion: {
+                name: "Essentials zone",
+                msg: "The Essentials zone receives less traffic; review wayfinding and promotional placement."
+            }
+        };
+
+        // Initialize Dashboard Code
+        window.addEventListener('DOMContentLoaded', () => {
+            initTrafficTideChart();
+            setupEventListeners();
+            startLiveClock();
+        });
+
+        // 1. Chart.js Initialization for Double Axis Tide Chart
+        function initTrafficTideChart() {
+            const ctx = document.getElementById('trafficTideChart').getContext('2d');
+            
+            // Create Gradient
+            const barGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            barGradient.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+            barGradient.addColorStop(1, 'rgba(59, 130, 246, 0.1)');
+
+            const currentStore = storeData['store_a'];
+
+            trafficChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'],
+                    datasets: [
+                        {
+                            label: 'Today entries',
+                            data: currentStore.chartDataToday,
+                            backgroundColor: barGradient,
+                            borderColor: '#235fa5',
+                            borderWidth: 1.5,
+                            borderRadius: 6,
+                            borderSkipped: false,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Previous-period average',
+                            data: currentStore.chartDataAvg,
+                            type: 'bar',
+                            backgroundColor: 'rgba(51, 65, 85, 0.5)',
+                            borderColor: '#475569',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Live occupancy ()',
+                            data: currentStore.chartDataOccupancy,
+                            type: 'line',
+                            borderColor: '#d98a35',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#d98a35',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Using custom header legend
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10,
+                            boxPadding: 4,
+                            usePointStyle: true,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { size: 11 }
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.3)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { size: 10 },
+                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Hourly entries',
+                                color: '#64748b',
+                                font: { size: 10 }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: '#d98a35',
+                                font: { size: 10 },
+                                callback: function(value) { return value >= 1000 ? (value/1000) + 'k' : value; }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Occupancy',
+                                color: '#d98a35',
+                                font: { size: 10 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Setup Interactive Event Listeners
+        function setupEventListeners() {
+            // Store Select Switch
+            document.getElementById('store-select').addEventListener('change', (e) => {
+                const storeKey = e.target.value;
+                updateDashboardData(storeKey);
+                showToast(`Store changed to: ${e.target.options[e.target.selectedIndex].text}`);
+            });
+
+            // Date Range Select Switch
+            document.getElementById('date-select').addEventListener('change', (e) => {
+                showToast(`Period changed to: ${e.target.options[e.target.selectedIndex].text}`);
+            });
+
+            // GDPR Privacy Mode Toggle
+            document.getElementById('gdpr-toggle').addEventListener('click', () => {
+                isGdprMode = !isGdprMode;
+                const badge = document.getElementById('gdpr-badge');
+                if (isGdprMode) {
+                    badge.classList.remove('hidden');
+                    showToast('Privacy mode enabled. Only aggregated counts are shown.', 'warning');
+                } else {
+                    badge.classList.add('hidden');
+                    showToast('Full aggregate analytics enabled.');
+                }
+            });
+
+            // Refresh Button Animation & Toast
+            document.getElementById('refresh-btn').addEventListener('click', () => {
+                const icon = document.getElementById('refresh-icon');
+                icon.classList.add('fa-spin');
+                
+                setTimeout(() => {
+                    icon.classList.remove('fa-spin');
+                    updateLiveTime();
+                    showToast('Traffic and building data refreshed.');
+                }, 600);
+            });
+        }
+
+        // Update Dashboard Values on Store Switch
+        function updateDashboardData(storeKey) {
+            const data = storeData[storeKey];
+            if (!data) return;
+
+            // Update KPI Text
+            document.getElementById('kpi-in-count').innerText = data.inCount;
+            document.getElementById('kpi-pass-count').innerText = data.passCount;
+            document.getElementById('kpi-conversion').innerText = data.conversion;
+            document.getElementById('kpi-dwell-time').innerText = data.dwell;
+            document.getElementById('kpi-occupancy').innerText = data.occupancy;
+            document.getElementById('density-val').innerText = data.density;
+            document.getElementById('hvac-fan-speed').innerText = data.hvacSpeed;
+            document.getElementById('hvac-energy-save').innerText = data.hvacEnergy;
+
+            // Update Occupancy Bar
+            const capPercent = ((data.occupancyVal / 5000) * 100).toFixed(1);
+            document.getElementById('occupancy-bar').style.width = `${capPercent}%`;
+
+            // Update Chart.js Data
+            if (trafficChart) {
+                trafficChart.data.datasets[0].data = data.chartDataToday;
+                trafficChart.data.datasets[1].data = data.chartDataAvg;
+                trafficChart.data.datasets[2].data = data.chartDataOccupancy;
+                trafficChart.update();
+            }
+        }
+
+        // Zone Click Selection Handler
+        function selectZone(zoneKey) {
+            const detail = zoneDetails[zoneKey];
+            if (!detail) return;
+
+            document.getElementById('selected-zone-name').innerText = detail.name;
+            showToast(detail.msg, 'info');
+        }
+
+        // Live Clock Auto Update
+        function startLiveClock() {
+            setInterval(() => {
+                updateLiveTime();
+            }, 30000);
+        }
+
+        function updateLiveTime() {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            document.getElementById('last-update-time').innerText = timeStr;
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-slate-900 border-blue-500/40 text-blue-300';
+            let iconClass = 'fa-circle-info text-blue-400';
+
+            if (type === 'warning') {
+                bgClass = 'bg-slate-900 border-amber-500/40 text-amber-300';
+                iconClass = 'fa-triangle-exclamation text-amber-400';
+            } else if (type === 'info') {
+                bgClass = 'bg-slate-900 border-cyan-500/40 text-cyan-300';
+                iconClass = 'fa-lightbulb text-cyan-400';
+            }
+
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 rounded-xl border ${bgClass} shadow-2xl text-xs font-medium transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            // Remove after 3s
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3200);
+        }
+    </script>
+
+<script id="milesight-dashboard-fit">
+  function fitMilesightDashboard(){
+    const wide=window.innerWidth>=1400||Boolean(document.fullscreenElement);
+    document.documentElement.classList.toggle('wide-layout',wide);
+    const logicalWidth=wide?1600:1200;
+    const logicalHeight=wide?900:660;
+    const scale=Math.min(window.innerWidth/logicalWidth,window.innerHeight/logicalHeight);
+    document.body.style.transform='scale('+scale+')';
+    document.body.style.left=((window.innerWidth-logicalWidth*scale)/2)+'px';
+  }
+  window.addEventListener('resize',fitMilesightDashboard);
+  window.addEventListener('DOMContentLoaded',()=>{
+    fitMilesightDashboard();
+    const button=document.getElementById('dashboard-fullscreen');
+    if(!button)return;
+    button.addEventListener('click',async()=>{
+      if(!document.fullscreenElement){await document.documentElement.requestFullscreen();}
+      else{await document.exitFullscreen();}
+    });
+    document.addEventListener('fullscreenchange',()=>{
+      const active=Boolean(document.fullscreenElement);
+      button.innerHTML=active?'<i class="fa-solid fa-compress"></i><span>Exit full screen</span>':'<i class="fa-solid fa-expand"></i><span>Full screen</span>';
+      button.setAttribute('aria-label',active?'Exit full screen':'Enter full screen');
+      requestAnimationFrame(fitMilesightDashboard);
+    });
+  });
+</script>
+<script src="locale-ja.js"></script>
+</body>
+</html>
